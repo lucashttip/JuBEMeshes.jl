@@ -159,15 +159,14 @@ function multi_bar(;ne1::Integer=4, ne2::Integer=8, lx1::Number=5, lx2::Number=5
     4   2   7   -10 -6
     5   3   8   -11 -7
     6   4   5   -12 -8   
-    7   -12 -11 -10 -9
-    8   17  18  19  20
-    9   9   14  -17 -13
-    10   10  15  -18 -14
-    11  11  16  -19 -15
-    12  12  13  -20 -16
+    7   17  18  19  20
+    8   9   14  -17 -13
+    9   10  15  -18 -14
+    10  11  16  -19 -15
+    11  12  13  -20 -16
     ]
 
-    surfaces = 1:12
+    surfaces = 1:11
 
     ps, ls, cs,ss = create_points_curves_surfs(points,lines,curves,surfaces)
 
@@ -176,19 +175,18 @@ function multi_bar(;ne1::Integer=4, ne2::Integer=8, lx1::Number=5, lx2::Number=5
 
     set_squares(ss)
 
-
     fixed = gmsh.model.addPhysicalGroup(2, [ss[1]])
     gmsh.model.setPhysicalName(2, fixed, "Face on x=0")
     freea = gmsh.model.addPhysicalGroup(2, ss[3:6])
     gmsh.model.setPhysicalName(2, freea, "Faces parallel to x. Bar 1")
-    freeb = gmsh.model.addPhysicalGroup(2, ss[9:12])
+    freeb = gmsh.model.addPhysicalGroup(2, ss[8:11])
     gmsh.model.setPhysicalName(2, freeb, "Faces parallel to x. Bar 2")
-    forced = gmsh.model.addPhysicalGroup(2, [ss[8]])
+    forced = gmsh.model.addPhysicalGroup(2, [ss[7]])
     gmsh.model.setPhysicalName(2, forced, "Face on x = dx")
     interfacea = gmsh.model.addPhysicalGroup(2, [ss[2]])
-    gmsh.model.setPhysicalName(2, interfacea, "Interface - bar 1")
-    interfaceb = gmsh.model.addPhysicalGroup(2, [ss[7]])
-    gmsh.model.setPhysicalName(2, interfaceb, "Interface - bar 2")
+    gmsh.model.setPhysicalName(2, interfacea, "Interface - bar 1 (normal ok)")
+    interfaceb = gmsh.model.addPhysicalGroup(2, [ss[2]])
+    gmsh.model.setPhysicalName(2, interfaceb, "Interface - bar 2 (invert normal)")
 
     gmsh.model.geo.synchronize()
 

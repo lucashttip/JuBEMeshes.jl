@@ -55,7 +55,9 @@ function create_points_curves_surfs(points,lines,curves,surfaces)
     end
 
     for i in axes(surfaces,1)
-        push!(ss,gmsh.model.geo.addPlaneSurface([cs[surfaces[i]]]))
+        idx = Int(abs(surfaces[i]))
+        si = sign(surfaces[i])
+        push!(ss,gmsh.model.geo.addPlaneSurface([si*cs[idx]]))
     end
 
     return ps, ls, cs,ss
