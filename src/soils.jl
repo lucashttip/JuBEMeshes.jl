@@ -417,7 +417,7 @@ function make_mesh_SSI_singleLayer(;a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,
     gmsh.model.setPhysicalName(2, EE, "Enclosing Elements - Layer 1")
     Bottom = gmsh.model.addPhysicalGroup(2, [ss[14]])
     gmsh.model.setPhysicalName(2, Bottom, "Bottom")
-    interface2 = gmsh.model.addPhysicalGroup(2, [ss[14]])
+    # interface2 = gmsh.model.addPhysicalGroup(2, [ss[14]])
 
     gmsh.model.geo.synchronize()
 
