@@ -1,18 +1,18 @@
 """
-    homog_bar(;ne1=4, ne2=8, lx=5, ly=1, lz=1, elementOrder=1, popup=true)
+    homog_bar(;neyz=4, nex=8, lx=5, ly=1, lz=1, elementOrder=1, popup=true)
 
 Generates the mesh of a bar that is divided in two.  
 
 # Arguments
-- `ne1::Integer`: number of elements on the y and z directions.
-- `ne2::Integer`: number of elements on the x direction.
+- `neyz::Integer`: number of elements on the y and z directions.
+- `nex::Integer`: number of elements on the x direction.
 - `lx::Float`: length in the x direction.
 - `ly::Float`: length in the y direction.
 - `lz::Float`: length in the z direction.
 - `elementOrder::Integer`: Order of the element (1 or 2).
 - `popup::Boolean`: Whether gmsh should popup with the mesh plotted.
 """
-function homog_bar(;ne1=4, ne2=8, lx=10, ly=1, lz=1, elementOrder=1, popup=true)
+function homog_bar(;neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1, popup=true)
     gmsh.initialize()
     gmsh.model.add("barra")
 
@@ -54,8 +54,8 @@ function homog_bar(;ne1=4, ne2=8, lx=10, ly=1, lz=1, elementOrder=1, popup=true)
 
     ps, ls, cs,ss = create_points_curves_surfs(points,lines,curves,surfaces)
 
-    make_lines_transfinite(ls, ne1)
-    make_lines_transfinite(ls[5:8], ne2)
+    make_lines_transfinite(ls, neyz)
+    make_lines_transfinite(ls[5:8], nex)
 
     set_squares(ss)
 
@@ -72,7 +72,7 @@ function homog_bar(;ne1=4, ne2=8, lx=10, ly=1, lz=1, elementOrder=1, popup=true)
     gmsh.model.mesh.generate(2)
     gmsh.model.mesh.setOrder(elementOrder)
 
-    name = "homogbar_ne=$(ne1)x$(ne2)_l=$(lx)x$(ly)x$(lz)_eo=$(elementOrder)"
+    name = "homogbar_ne=$(neyz)x$(nex)_l=$(lx)x$(ly)x$(lz)_eo=$(elementOrder)"
 
     file_msh = string(name,".msh")
     gmsh.write(file_msh)
@@ -93,13 +93,13 @@ end
 
 
 """
-    multi_bar(;ne1=4, ne2=8, lx1=5, lx2=5, ly=1, lz=1, elementOrder=1, popup=true)
+    multi_bar(;neyz=4, nex=8, lx1=5, lx2=5, ly=1, lz=1, elementOrder=1, popup=true)
 
 Generates the mesh of a bar that is divided in two.  
 
 # Arguments
-- `ne1::Integer`: number of elements on the y and z directions.
-- `ne2::Integer`: number of elements on the x direction.
+- `neyz::Integer`: number of elements on the y and z directions.
+- `nex::Integer`: number of elements on the x direction.
 - `lx1::Float`: length of the first part in the x direction.
 - `lx2::Float`: length of the second part in the x direction.
 - `ly::Float`: length in the y direction.
@@ -107,7 +107,7 @@ Generates the mesh of a bar that is divided in two.
 - `elementOrder::Integer`: Order of the element (1 or 2).
 - `popup::Boolean`: Whether gmsh should popup with the mesh plotted.
 """
-function multi_bar(;ne1::Integer=4, ne2::Integer=8, lx1::Number=5, lx2::Number=5, ly::Number=1, lz::Number=1, elementOrder::Integer=1, popup::Bool=true)
+function multi_bar(;neyz::Integer=4, nex::Integer=8, lx1::Number=5, lx2::Number=5, ly::Number=1, lz::Number=1, elementOrder::Integer=1, popup::Bool=true)
     
     gmsh.initialize()
     gmsh.model.add("bar")
@@ -170,8 +170,8 @@ function multi_bar(;ne1::Integer=4, ne2::Integer=8, lx1::Number=5, lx2::Number=5
 
     ps, ls, cs,ss = create_points_curves_surfs(points,lines,curves,surfaces)
 
-    make_lines_transfinite(ls, ne1)
-    make_lines_transfinite(ls[[5:8;13:16]], ne2)
+    make_lines_transfinite(ls, neyz)
+    make_lines_transfinite(ls[[5:8;13:16]], nex)
 
     set_squares(ss)
 
@@ -195,7 +195,7 @@ function multi_bar(;ne1::Integer=4, ne2::Integer=8, lx1::Number=5, lx2::Number=5
     gmsh.model.mesh.setOrder(elementOrder)
    
    
-    name = "multibar_ne=$(ne1)x($(ne2)+$(ne2))_l=($(lx1)+$(lx2))x$(ly)x$(lz)_eo=$(elementOrder)"
+    name = "multibar_ne=$(neyz)x($(nex)+$(nex))_l=($(lx1)+$(lx2))x$(ly)x$(lz)_eo=$(elementOrder)"
 
     file_msh = string(name,".msh")
     gmsh.write(file_msh)
