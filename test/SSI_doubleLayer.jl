@@ -8,8 +8,7 @@ args = (
     h=8.0,              # Height of the soil layer * a
     popup=false,        # Should popup gmsh?
     nee = 4,            # Number of enclosing elements per side
-    ns2 = 16,            # Number of enclosing elements on the bottom?
     elementOrder = 1    # elementOrder
 )
 
-make_mesh_SSI_singleLayer(;args...)
+make_mesh_SSI_layer(;args...)
