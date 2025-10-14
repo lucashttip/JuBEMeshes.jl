@@ -12,7 +12,7 @@ Generates the mesh of a bar that is divided in two.
 - `elementOrder::Integer`: Order of the element (1 or 2).
 - `popup::Boolean`: Whether gmsh should popup with the mesh plotted.
 """
-function homog_bar(;neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1, popup=true)
+function homog_bar(filename="";neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1, popup=false)
     gmsh.initialize()
     gmsh.model.add("barra")
 
@@ -72,7 +72,11 @@ function homog_bar(;neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1, popup=true
     gmsh.model.mesh.generate(2)
     gmsh.model.mesh.setOrder(elementOrder)
 
-    name = "homogbar_ne=$(neyz)x$(nex)_l=$(lx)x$(ly)x$(lz)_eo=$(elementOrder)"
+    if filename != ""
+        name = filename
+    else
+        name = "homogbar_ne=$(neyz)x$(nex)_l=$(lx)x$(ly)x$(lz)_eo=$(elementOrder)"
+    end
 
     file_msh = string(name,".msh")
     gmsh.write(file_msh)
@@ -107,7 +111,7 @@ Generates the mesh of a bar that is divided in two.
 - `elementOrder::Integer`: Order of the element (1 or 2).
 - `popup::Boolean`: Whether gmsh should popup with the mesh plotted.
 """
-function multi_bar(;neyz::Integer=4, nex::Integer=8, lx1::Number=5, lx2::Number=5, ly::Number=1, lz::Number=1, elementOrder::Integer=1, popup::Bool=true)
+function multi_bar(filename="";neyz::Integer=4, nex::Integer=8, lx1::Number=5, lx2::Number=5, ly::Number=1, lz::Number=1, elementOrder::Integer=1, popup::Bool=false)
     
     gmsh.initialize()
     gmsh.model.add("bar")
@@ -195,7 +199,11 @@ function multi_bar(;neyz::Integer=4, nex::Integer=8, lx1::Number=5, lx2::Number=
     gmsh.model.mesh.setOrder(elementOrder)
    
    
-    name = "multibar_ne=$(neyz)x($(nex)+$(nex))_l=($(lx1)+$(lx2))x$(ly)x$(lz)_eo=$(elementOrder)"
+    if filename != ""
+        name = filename
+    else
+        name = "multibar_ne=$(neyz)x($(nex)+$(nex))_l=($(lx1)+$(lx2))x$(ly)x$(lz)_eo=$(elementOrder)"
+    end
 
     file_msh = string(name,".msh")
     gmsh.write(file_msh)

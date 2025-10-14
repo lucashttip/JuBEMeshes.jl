@@ -140,7 +140,7 @@ function make_mesh_soil_foundation(a=1.0, fl=2.0, fs=10.0, nf=18, ns=9, popup=fa
     return filename_msh
 end
 
-function make_mesh_SSI_layer(;a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 2,elementOrder = 1)
+function make_mesh_SSI_layer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 2,elementOrder = 1)
 
     gmsh.initialize()
     gmsh.model.add("soil")
@@ -285,7 +285,12 @@ function make_mesh_SSI_layer(;a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 
     gmsh.model.mesh.setOrder(elementOrder)
 
 
-    name = "SoilLayers_a=$(a)_fl=$(fl)_fs=$(fs)_h=$(h),nf=$(nf)_eo=$(elementOrder)"
+    
+    if filename != ""
+        name = filename
+    else
+        name = "SoilLayers_a=$(a)_fl=$(fl)_fs=$(fs)_h=$(h),nf=$(nf)_eo=$(elementOrder)"
+    end
 
     file_msh = string(name,".msh")
     gmsh.write(file_msh)
@@ -304,7 +309,7 @@ function make_mesh_SSI_layer(;a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 
 
 end
 
-function make_mesh_SSI_singleLayer(;a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 2,ns2 = 2,elementOrder = 1)
+function make_mesh_SSI_singleLayer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 2,ns2 = 2,elementOrder = 1)
     gmsh.initialize()
     gmsh.model.add("soil")
 
@@ -426,7 +431,12 @@ function make_mesh_SSI_singleLayer(;a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,
     gmsh.model.mesh.setOrder(elementOrder)
 
 
-    name = "SoilSingleLayer_a=$(a)_fl=$(fl)_fs=$(fs)_h=$(h),nf=$(nf),ne2=$(ne2)_eo=$(elementOrder)"
+    
+    if filename != ""
+        name = filename
+    else
+        name = "SoilSingleLayer_a=$(a)_fl=$(fl)_fs=$(fs)_h=$(h),nf=$(nf),ne2=$(ne2)_eo=$(elementOrder)"
+    end
 
     file_msh = string(name,".msh")
     gmsh.write(file_msh)
