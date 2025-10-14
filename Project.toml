@@ -1,7 +1,7 @@
 name = "JuBEMeshes"
 uuid = "d6dacf24-aced-4a7c-8f6c-751077a72dc6"
 authors = ["Lucas Pacheco"]
-version = "1.0.0-DEV"
+version = "1.1.0-DEV"
 
 [deps]
 Gmsh = "705231aa-382f-11e9-3f0c-b7cb4346fdeb"
