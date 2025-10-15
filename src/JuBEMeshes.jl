@@ -2,7 +2,6 @@ module JuBEMeshes
 
 # Write your package code here.
 import Gmsh: gmsh
-using Infiltrator
 
 include("auxfunctions.jl")
 include("bars.jl")

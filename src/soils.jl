@@ -274,7 +274,6 @@ function make_mesh_SSI_layer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=f
     gmsh.model.setPhysicalName(2, interface1, "Interface - Layer 1 (normal ok)")
     interface2 = gmsh.model.addPhysicalGroup(2, [ss[14]])
     gmsh.model.setPhysicalName(2, interface2, "Interface - Layer 2 (invert normal)")
-    @infiltrate
     EE2 = gmsh.model.addPhysicalGroup(2, ss[15:19])
     gmsh.model.setPhysicalName(2, EE2, "Enclosing Elements - Layer 2")
 
