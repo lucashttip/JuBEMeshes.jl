@@ -5,6 +5,12 @@ function make_lines_transfinite(lines, ne)
     end
 end
 
+function make_lines_transfinite(lines, ne, meshType, coef)
+    for line in lines
+        gmsh.model.geo.mesh.setTransfiniteCurve(line, ne+1, meshType, coef)
+    end
+end
+
 function set_squares(surfaces)
     for surface in surfaces
         gmsh.model.geo.mesh.setTransfiniteSurface(surface)

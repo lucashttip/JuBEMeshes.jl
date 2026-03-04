@@ -7,6 +7,6 @@ include("auxfunctions.jl")
 include("bars.jl")
 include("soils.jl")
 
-export homog_bar, multi_bar, make_mesh_SSI_layer, make_mesh_SSI_singleLayer
+export homog_bar, multi_bar, make_mesh_SSI_layer, make_mesh_SSI_singleLayer, make_mesh_SSI_singleLayerGrowth
 
 end

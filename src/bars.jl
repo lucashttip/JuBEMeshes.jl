@@ -12,7 +12,7 @@ Generates the mesh of a bar that is divided in two.
 - `elementOrder::Integer`: Order of the element (1 or 2).
 - `popup::Boolean`: Whether gmsh should popup with the mesh plotted.
 """
-function homog_bar(filename="";neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1, popup=false)
+function homog_bar(filename="";neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1, popup=false, create_geo=true)
     gmsh.initialize()
     gmsh.model.add("barra")
 
@@ -84,6 +84,11 @@ function homog_bar(filename="";neyz=4, nex=8, lx=10, ly=1, lz=1, elementOrder=1,
     file_vtk = string(name,".vtk")
     gmsh.write(file_vtk)
 
+    if create_geo
+        file_geo = string(name,".geo_unrolled")
+        gmsh.write(file_geo)
+    end
+
     # Launch the GUI to see the results
     if popup
         gmsh.fltk.run()
@@ -111,7 +116,7 @@ Generates the mesh of a bar that is divided in two.
 - `elementOrder::Integer`: Order of the element (1 or 2).
 - `popup::Boolean`: Whether gmsh should popup with the mesh plotted.
 """
-function multi_bar(filename="";neyz::Integer=4, nex::Integer=8, lx1::Number=5, lx2::Number=5, ly::Number=1, lz::Number=1, elementOrder::Integer=1, popup::Bool=false)
+function multi_bar(filename="";neyz::Integer=4, nex::Integer=8, lx1::Number=5, lx2::Number=5, ly::Number=1, lz::Number=1, elementOrder::Integer=1, popup::Bool=false, create_geo::Bool=true)
     
     gmsh.initialize()
     gmsh.model.add("bar")
@@ -210,6 +215,12 @@ function multi_bar(filename="";neyz::Integer=4, nex::Integer=8, lx1::Number=5, l
 
     file_vtk = string(name,".vtk")
     gmsh.write(file_vtk)
+
+
+    if create_geo
+        file_geo = string(name,".geo")
+        gmsh.write(file_geo)
+    end
 
 
     # Launch the GUI to see the results

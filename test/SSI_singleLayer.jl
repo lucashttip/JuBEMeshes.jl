@@ -6,10 +6,11 @@ args = (
     fs=8.0,            # size of the side of the soil * a
     nf=4,               # Number of elements on foundation side
     h=8.0,              # Height of the soil layer * a
-    popup=false,        # Should popup gmsh?
+    popup=true,        # Should popup gmsh?
     nee = 4,            # Number of enclosing elements per side
     ns2 = 16,            # Number of enclosing elements on the bottom?
-    elementOrder = 1    # elementOrder
+    elementOrder = 1,    # elementOrder
+    growth = 2.0
 )
 
 make_mesh_SSI_singleLayer(;args...)

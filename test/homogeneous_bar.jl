@@ -7,7 +7,7 @@ args = (
     ly = 1,             # lengthInY
     lz = 1,             # lengthInZ
     elementOrder = 1,   # elementOrder
-    popup = false,      # shouldPopup
+    popup = false      # shouldPopup,
 )
 
 homog_bar(;args...)
