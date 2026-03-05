@@ -526,7 +526,7 @@ function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,n
         10 17 18  19  20
     ]
 
-    surfaces = [collect(1:5);-1 * collect(6:10)]
+    surfaces = [-1 * collect(1:5);collect(6:10)]
 
     ps, ls, cs, ss = create_points_curves_surfs(points,lines,curves,surfaces)
 
