@@ -140,7 +140,7 @@ function make_mesh_soil_foundation(a=1.0, fl=2.0, fs=10.0, nf=18, ns=9, popup=fa
     return filename_msh
 end
 
-function make_mesh_SSI_layer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 2,elementOrder = 1, create_geo=true)
+function make_mesh_SSI_layer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=false,nee = 2,elementOrder = 1)
 
     gmsh.initialize()
     gmsh.model.add("soil")
@@ -296,11 +296,6 @@ function make_mesh_SSI_layer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,popup=f
 
     file_vtk = string(name,".vtk")
     gmsh.write(file_vtk)
-
-    if create_geo
-        file_geo = string(name,".geo")
-        gmsh.write(file_geo)
-    end
 
     # Launch the GUI to see the results
     if popup
@@ -469,6 +464,8 @@ function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,n
     ls = fs*a
 
     radial_coef = 1.0 / growth
+    # radial_coef = growth
+
 
 
     points = [
@@ -511,6 +508,10 @@ function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,n
         22  6   7
         23  7   8
         24  8   5
+        25  9   10
+        26  10  11
+        27  11  12
+        28  12  9
     ]
 
     curves = [
@@ -523,7 +524,7 @@ function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,n
         7  22  15 -18 -14
         8  23  16 -19 -15
         9  24 13 -20 -16
-        10 17 18  19  20
+        10 25 26  27  28
     ]
 
     surfaces = [-1 * collect(1:5);collect(6:10)]
@@ -533,6 +534,8 @@ function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,n
     make_lines_transfinite(ls[[1:4...,9:12...]], nf)
     make_lines_transfinite(ls[[5:8...]], ne2, "Progression", radial_coef)
     make_lines_transfinite(ls[[13:24...]], nee)
+    make_lines_transfinite(ls[[25:28...]], ns2)
+
 
     set_squares(ss)
 
