@@ -456,6 +456,7 @@ function make_mesh_SSI_singleLayer(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,h=5.0,p
     return file_msh
 end
 
+# This function generates a uniform mesh on the soil surface and a homogeneous mesh on the bottom
 function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,ne2 = 4,h=5.0,popup=false,nee = 2,ns2 = 2,elementOrder = 1,  growth=1.0)
     gmsh.initialize()
     gmsh.model.add("soil")
@@ -546,6 +547,146 @@ function make_mesh_SSI_singleLayerGrowth(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,n
     EE = gmsh.model.addPhysicalGroup(2, ss[6:9])
     gmsh.model.setPhysicalName(2, EE, "Enclosing Elements - Layer 1")
     Bottom = gmsh.model.addPhysicalGroup(2, [ss[10]])
+    gmsh.model.setPhysicalName(2, Bottom, "Bottom")
+    # interface2 = gmsh.model.addPhysicalGroup(2, [ss[14]])
+
+    gmsh.model.geo.synchronize()
+
+    # Generate and save the mesh
+    gmsh.model.mesh.generate(2)
+    gmsh.model.mesh.setOrder(elementOrder)
+
+
+    
+    if filename != ""
+        name = filename
+    else
+        name = "SoilSingleLayerGrowth_a=$(a)_fl=$(fl)_fs=$(fs)_h=$(h),nf=$(nf),ne2=$(ne2),growth=$(growth)_eo=$(elementOrder)"
+    end
+
+    file_msh = string(name,".msh")
+    gmsh.write(file_msh)
+
+    file_vtk = string(name,".vtk")
+    gmsh.write(file_vtk)
+
+
+    # Launch the GUI to see the results
+    if popup
+        gmsh.fltk.run()
+    end
+
+    gmsh.finalize()
+    return file_msh
+end
+
+# This function generates a uniform mesh both on the soil surface and on the bottom, with same properties.
+function make_mesh_SSI_singleLayerGrowth2(filename="";a=1.0,fl=2.0,fs=10.0,nf=4,ne2 = 4,h=5.0,popup=false,nee = 2,elementOrder = 1,  growth=1.0)
+    gmsh.initialize()
+    gmsh.model.add("soil")
+
+    lf = fl*a
+    ls = fs*a
+
+    radial_coef = 1.0 / growth
+    # radial_coef = growth
+
+
+
+    points = [
+        1   -lf/2   -lf/2   0   # Fundação
+        2   lf/2    -lf/2   0   # Fundação 
+        3   lf/2    lf/2    0   # Fundação
+        4   -lf/2   lf/2    0   # Fundação
+        5   -ls/2   -ls/2   0   # Camada 1
+        6   ls/2    -ls/2   0   # Camada 1
+        7  ls/2    ls/2    0   # Camada 1
+        8  -ls/2   ls/2    0   # Camada 1
+        9   -lf/2   -lf/2   h   # Fundação camada 2
+        10  lf/2    -lf/2   h   # Fundação camada 2
+        11  lf/2    lf/2    h   # Fundação camada 2
+        12  -lf/2   lf/2    h   # Fundação camada 2
+        13  -ls/2   -ls/2   h   # Camada 2
+        14  ls/2    -ls/2   h   # Camada 2
+        15  ls/2    ls/2    h   # Camada 2
+        16  -ls/2   ls/2    h   # Camada 2
+
+    ]
+
+    lines = [
+        1   1   2   # Foundation (nf)
+        2   2   3   # Foundation (nf)
+        3   3   4   # Foundation (nf)
+        4   4   1   # Foundation (nf)
+        5   1   5   # Connection from side to foundation
+        6   2   6   # Connection from side to foundation
+        7   3   7   # Connection from side to foundation
+        8   4   8   # Connection from side to foundation
+        9   5   6   # Side of free soil - For soil surface
+        10  6   7   # Side of free soil - For soil surface
+        11  7   8   # Side of free soil - For soil surface
+        12  8   5   # Side of free soil - For soil surface
+        13  5   9   # Connection from side to bottom
+        14  6   10  # Connection from side to bottom
+        15  7   11  # Connection from side to bottom
+        16  8   12  # Connection from side to bottom
+        17  13  14  # Side of bottom for EE
+        18  14  15  # Side of bottom for EE
+        19  15  16  # Side of bottom for EE
+        20  16  13  # Side of bottom for EE
+        21  5   6   # Side of free soil - EE
+        22  6   7   # Side of free soil - EE
+        23  7   8   # Side of free soil - EE
+        24  8   5   # Side of free soil - EE
+        25  9   10  # Dupe of foundation at bottom
+        26  10  11  # Dupe of foundation at bottom
+        27  11  12  # Dupe of foundation at bottom
+        28  12  9   # Dupe of foundation at bottom
+        29  13  9   # Connection from side to foundation bottom
+        30  14  10  # Connection from side to foundation bottom
+        31  15  11  # Connection from side to foundation bottom
+        32  16  12  # Connection from side to foundation bottom
+        33  13  14  # Side of bottom
+        34  14  15  # Side of bottom
+        35  15  16  # Side of bottom
+        36  16  13  # Side of bottom
+    ]
+
+    curves = [
+        1   1   2   3   4       # Foundation
+        2   5   9  -6 -1      # Soil Layer 1
+        3   6   10 -7 -2
+        4   7   11 -8 -3     # Soil Layer 1
+        5   8   12 -5 -4     # Soil Layer 1
+        6   21   14 -17 -13
+        7  22  15 -18 -14
+        8  23  16 -19 -15
+        9  24 13 -20 -16
+        10 -25 -26  -27  -28
+        11 29 25 -30 -33
+        12 30 26 -31 -34
+        13 31 27 -32 -35
+        14 32 28 -29 -36
+    ]
+
+    surfaces = [-1 * collect(1:5);collect(6:10)]
+
+    ps, ls, cs, ss = create_points_curves_surfs(points,lines,curves,surfaces)
+
+    make_lines_transfinite(ls[[1:4...,9:12...,25:28...,33:36...]], nf)
+    make_lines_transfinite(ls[[5:8...,29:32...]], ne2, "Progression", radial_coef)
+    make_lines_transfinite(ls[[13:24...]], nee)
+
+
+    set_squares(ss)
+
+    foundation = gmsh.model.addPhysicalGroup(2, [ss[1]])
+    gmsh.model.setPhysicalName(2, foundation, "Foundation")
+    freea = gmsh.model.addPhysicalGroup(2, ss[2:5])
+    gmsh.model.setPhysicalName(2, freea, "Free Soil Layer 1")
+    EE = gmsh.model.addPhysicalGroup(2, ss[6:9])
+    gmsh.model.setPhysicalName(2, EE, "Enclosing Elements - Layer 1")
+    Bottom = gmsh.model.addPhysicalGroup(2, [ss[10:14]])
     gmsh.model.setPhysicalName(2, Bottom, "Bottom")
     # interface2 = gmsh.model.addPhysicalGroup(2, [ss[14]])
 
